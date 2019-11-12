@@ -1,4 +1,4 @@
-# okaythis_flutter_plugin
+# Okay
 
 A Flutter plugin for Okaythis.
 

@@ -128,6 +128,7 @@ class PageTheme {
   static final String ACTION_BAR_TITLE = "actionBarTitle";
   static final String INPUT_TEXT_COLOR = "inputTextColor";
   static final String INPUT_SELECTION_COLOR = "inputSelectionColor";
+  static final String INPUT_ERROR_COLOR = "inputErrorColor";
   static final String INPUT_DEFAULT_COLOR = "inputDefaultColor";
   static final String QUESTION_MARK_COLOR = "questionMarkColor";
   static final String TRANSACTION_TYPE_TEXT_COLOR = "transactionTypeTextColor";
@@ -160,6 +161,7 @@ class PageTheme {
   static final String PIN_NUMBER_BUTTON_BACKGROUND_COLOR = "pinNumberButtonBackgroundColor";
   static final String PIN_REMOVE_BUTTON_TEXT_COLOR = "pinRemoveButtonTextColor";
   static final String PIN_REMOVE_BUTTON_BACKGROUND_COLOR = "pinRemoveButtonBackgroundColor";
+  
 
 }
 

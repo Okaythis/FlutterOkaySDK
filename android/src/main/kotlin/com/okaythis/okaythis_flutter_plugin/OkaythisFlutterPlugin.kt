@@ -3,18 +3,17 @@ package com.okaythis.okaythis_flutter_plugin
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
-//import android.support.v7.app.AppCompatActivity
+import android.graphics.Color
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.itransition.protectoria.psa_multitenant.data.SpaStorage
 import com.itransition.protectoria.psa_multitenant.protocol.scenarios.linking.LinkingScenarioListener
 import com.itransition.protectoria.psa_multitenant.protocol.scenarios.unlinking.UnlinkingScenarioListener
 import com.itransition.protectoria.psa_multitenant.restapi.GatewayRestServer
 import com.itransition.protectoria.psa_multitenant.state.ApplicationState
 import com.okaythis.okaythis_flutter_plugin.logger.OkaySdkExceptionLogger
-import com.okaythis.okaythis_flutter_plugin.psatheme.BaseTheme
 import com.okaythis.okaythis_flutter_plugin.storage.SpaStorageImp
 import com.protectoria.psa.PsaManager
 import com.protectoria.psa.api.PsaConstants
@@ -30,7 +29,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.common.PluginRegistry
-import org.bouncycastle.asn1.x500.style.RFC4519Style.c
+
+
 
 class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : MethodCallHandler, PluginRegistry.ActivityResultListener {
 
@@ -133,8 +133,9 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
             "startAuthorization" -> {
                 val sessionId: Integer? = call.argument("sessionId")
                 val appPns: String? = call.argument("appPns")
-//                val pageTheme = call.argument("pageTheme")
-                startAuthorizationActivity(SpaAuthorizationData(sessionId!!.toLong(), appPns, BaseTheme(context).DEFAULT_PAGE_THEME, PsaType.OKAY))
+                val pageTheme: Map<String, Any>? = call.argument("pageTheme")
+                var baseTheme = mapTheme(pageTheme!!)
+                startAuthorizationActivity(SpaAuthorizationData(sessionId!!.toLong(), appPns, baseTheme, PsaType.OKAY))
                 result.success(null)
             }
             "requestRequiredPermissions" -> {
@@ -182,8 +183,23 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
         return false
     }
 
+    private fun mapTheme(map: Map<*,*>): PageTheme {
+        val mapper = ObjectMapper()
+        return mapper.convertValue(parseThemeValues(map), PageTheme::class.java)
+    }
+
+    private fun parseThemeValues(map: Map<*, *>): HashMap<Any?, Any?> {
+        val hm = HashMap<Any?, Any?>()
+        val m: MutableMap<Any?, Any?> = map.toMutableMap()
+        val iterator: Iterable<Map.Entry<Any?, Any?>> = m.asIterable()
+        for (entry in iterator) {
+            hm[entry.key] = Color.parseColor(entry.value as String)
+        }
+        return hm
+    }
+
     companion object {
-        private lateinit var channel: MethodChannel;
+        private lateinit var channel: MethodChannel
 
         @JvmStatic
         fun registerWith(registrar: Registrar) {
@@ -194,4 +210,7 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
         }
     }
 }
+
+
+
 

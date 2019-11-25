@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.itransition.protectoria.psa_multitenant.data.SpaStorage
@@ -74,7 +72,6 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
             "initPsa" -> {
                 val pssEndpoint = call.arguments
                 initPsa(pssEndpoint.toString()!!).let {
-                    Log.d("argument: ", "$it")
                     result.success(it)
                 }
             }
@@ -85,14 +82,12 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
                     override fun onUnlinkingFailed(p0: ApplicationState) {
                         // Notify user linking failed
                         channel.invokeMethod("onUnLinkingHandler", false)
-                        Toast.makeText(context, "unlinking not Successful", Toast.LENGTH_SHORT).show()
                         result.success(false)
                     }
 
                     override fun onUnlinkingCompletedSuccessful() {
                         // Notify user the call was successfull
                         channel.invokeMethod("unOnLinkingHandler", true)
-                        Toast.makeText(context, "unlinking Successful", Toast.LENGTH_SHORT).show()
                         result.success(true)
                     }
 
@@ -105,14 +100,12 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
                     override fun onLinkingFailed(p0: ApplicationState?) {
                       // Notify user linking failed
                         channel.invokeMethod("onLinkingHandler", false)
-                        Toast.makeText(context, "Linking not Successful: ${p0.toString()}", Toast.LENGTH_SHORT).show()
                         result.success(false)
                     }
 
                     override fun onLinkingCompletedSuccessful(p0: Long, p1: String?) {
                         // Notify user the call was successfull
                         channel.invokeMethod("onLinkingHandler", true)
-                        Toast.makeText(context, "Linking Successful", Toast.LENGTH_SHORT).show()
                         result.success(true)
                     }
                 }
@@ -160,12 +153,9 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
                         spaStorage.putExternalId(it.externalId)
                     }
                     channel.invokeMethod("onEnrollmentHandler", true)
-                    Toast.makeText(context,   "Successfully got this externalId " + resultData.externalId, Toast.LENGTH_SHORT).show()
                 }
             } else {
                 channel.invokeMethod("onEnrollmentHandler", false)
-                Toast.makeText(context, "Error Retrieving intent after enrollment:-  errorCode: $resultCode", Toast.LENGTH_SHORT).show()
-
             }
             return true
         }
@@ -173,10 +163,8 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
         if (requestCode == PsaConstants.ACTIVITY_REQUEST_CODE_PSA_AUTHORIZATION) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 channel.invokeMethod("onAuthorizationHandler", true)
-                Toast.makeText(context, "Authorization granted", Toast.LENGTH_SHORT).show()
             } else {
                 channel.invokeMethod("onAuthorizationHandler", false)
-                Toast.makeText(context, "Authorization not granted", Toast.LENGTH_SHORT).show()
             }
             return true
         }

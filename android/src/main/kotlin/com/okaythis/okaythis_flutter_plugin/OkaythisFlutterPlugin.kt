@@ -36,31 +36,31 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
 
     private val spaStorage = SpaStorageImp(context)
 
-    fun initPsa(pssEndpoint: String): String {
+    private fun initPsa(pssEndpoint: String): String {
         val psaManager = PsaManager.init(this.context, OkaySdkExceptionLogger())
         psaManager.setPssAddress(pssEndpoint)
         GatewayRestServer.init(PsaGsonFactory().create(), "$pssEndpoint/gateway/")
         return "PSS endpoint set successfully"
     }
 
-    fun linkTenant(linkingCode: String, spaStorage: SpaStorage, linkingScenarioListener: LinkingScenarioListener) {
+    private fun linkTenant(linkingCode: String, spaStorage: SpaStorage, linkingScenarioListener: LinkingScenarioListener) {
         val psaManager = PsaManager.getInstance()
         psaManager.linkTenant(linkingCode, spaStorage, linkingScenarioListener)
     }
 
-    fun startEnrollmentActivity(spaEnrollData: SpaEnrollData) {
+    private fun startEnrollmentActivity(spaEnrollData: SpaEnrollData) {
         PsaManager.startEnrollmentActivity(this.activity, spaEnrollData)
     }
 
-    fun startAuthorizationActivity(spaAuthorizationData: SpaAuthorizationData) {
+    private fun startAuthorizationActivity(spaAuthorizationData: SpaAuthorizationData) {
         PsaManager.startAuthorizationActivity(this.activity, spaAuthorizationData)
     }
 
-    fun requestRequiredPermissions(): Array<String> {
+    private fun requestRequiredPermissions(): Array<String> {
         return  PsaManager.getRequiredPermissions()
     }
 
-    fun unLinkTenant(tenantId: Int, spaStorage: SpaStorage, unlinkingScenarioListener: UnlinkingScenarioListener) {
+    private fun unLinkTenant(tenantId: Int, spaStorage: SpaStorage, unlinkingScenarioListener: UnlinkingScenarioListener) {
         val psaManager = PsaManager.getInstance()
         psaManager.unlinkTenant(tenantId.toLong(), spaStorage, unlinkingScenarioListener)
     }

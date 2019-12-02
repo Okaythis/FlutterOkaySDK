@@ -166,7 +166,7 @@ If unlinking was successful our `onUnLinkingHandler` will be called with status 
 
 ## Page Theme
 
-Okay allows developers to customize the UI of their apps to suit their desired look and feel to match the currrent theme of their app.
+Okay allows developers to customize the UI of their apps to suit their desired look and feel.
 
 Okay Flutter plugin provides a class called **PageTheme**. The class provides all customizable color properties that are available for development.
 

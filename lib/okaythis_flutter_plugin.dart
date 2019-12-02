@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
-
 import 'package:flutter/services.dart';
 
 typedef Future<dynamic> MessageHandler(bool status);
@@ -40,57 +38,32 @@ class OkaythisFlutterPlugin {
   }
 
   static Future<void> startEnrollment(String appPns, String pubPss, String installationId) async {
-    try {
       await _channel.invokeMethod("startEnrollment", <String, dynamic>{
         "appPns": appPns,
         "pubPss": pubPss,
         "installationId": installationId,
         "host": _host
       });
-    } on PlatformException catch (e) {
-
-    } on MissingPluginException catch (e) {
-
-    }
   }
 
   static Future<void> startAuthorization(int sessionId, String appPns,  Map<String, dynamic> pageTheme) async {
-    print("SessionId ${sessionId}");
-    try {
       await _channel.invokeMethod("startAuthorization", <String, dynamic>{
         "sessionId": sessionId,
         "appPns": appPns,
         "pageTheme": pageTheme
       });
-    } on PlatformException catch (e) {
-
-    } on MissingPluginException catch (e) {
-
-    }
   }
 
   static Future<void> linkTenant(String linkingCode) async {
-    try {
       await _channel.invokeMethod("linkTenant", <String, dynamic>{
         "linkingCode": linkingCode
       });
-    } on PlatformException catch (e) {
-
-    } on MissingPluginException catch (e) {
-
-    }
   }
 
   static Future<void> unlinkTenant(int tenantId) async {
-    try {
       await _channel.invokeMethod("unlinkTenant", <String, dynamic>{
         "tenantId": tenantId
       });
-    } on PlatformException catch (e) {
-
-    } on MissingPluginException catch (e) {
-
-    }
   }
 
 
@@ -116,51 +89,51 @@ class OkaythisFlutterPlugin {
 
 class PageTheme {
 
-  static final String ACTION_BAR_BACKGROUND_COLOR = "actionBarBackgroundColor";
-  static final String ACTION_BAR_TEXT_COLOR = "actionBarTextColor";
-  static final String BUTTON_TEXT_COLOR = "buttonTextColor";
-  static final String BUTTON_BACKGROUND_COLOR = "buttonBackgroundColor";
-  static final String SCREEN_BACKGROUND_COLOR = "screenBackgroundColor";
-  static final String NAME_TEXT_COLOR = "nameTextColor";
-  static final String TITLE_TEXT_COLOR = "titleTextColor";
-  static final String MESSAGE_TEXT_COLOR = "messageTextColor";
-  static final String ACTION_BAR_LOGO_PATH = "actionBarLogoPath";
-  static final String ACTION_BAR_TITLE = "actionBarTitle";
-  static final String INPUT_TEXT_COLOR = "inputTextColor";
-  static final String INPUT_SELECTION_COLOR = "inputSelectionColor";
-  static final String INPUT_ERROR_COLOR = "inputErrorColor";
-  static final String INPUT_DEFAULT_COLOR = "inputDefaultColor";
-  static final String QUESTION_MARK_COLOR = "questionMarkColor";
-  static final String TRANSACTION_TYPE_TEXT_COLOR = "transactionTypeTextColor";
-  static final String INFO_SECTION_TITLE_COLOR = "infoSectionTitleColor";
-  static final String INFO_SECTION_VALUE_COLOR = "infoSectionValueColor";
-  static final String FROM_TEXT_COLOR = "fromTextColor";
-  static final String AUTH_INFO_BACKGROUND_COLOR = "authInfoBackgroundColor";
-  static final String SHOW_DETAILS_TEXT_COLOR = "showDetailsTextColor";
-  static final String CONFIRM_BUTTON_BACKGROUND_COLOR = "confirmButtonBackgroundColor";
-  static final String CONFIRM_BUTTON_TEXT_COLOR = "confirmButtonTextColor";
-  static final String CANCEL_BUTTON_BACKGROUND_COLOR = "cancelButtonBackgroundColor";
-  static final String CANCEL_BUTTON_TEXT_COLOR = "cancelButtonTextColor";
-  static final String AUTH_CONFIRMATION_BACKGROUND_COLOR = "authConfirmationBackgroundColor";
-  static final String AUTH_CONFIRMATION_TITLE_COLOR = "authConfirmationTitleColor";
-  static final String AUTH_CONFIRMATION_MESSAGE_COLOR = "authConfirmationMessageColor";
-  static final String AUTH_CONFIRMATION_THUMB_COLOR = "authConfirmationThumbColor";
-  static final String AUTH_CONFIRMATION_APOSTROPHE_COLOR = "authConfirmationApostropheColor";
-  static final String AUTH_CONFIRMATION_BUTTON_BACKGROUND_COLOR = "authConfirmationButtonBackgroundColor";
-  static final String AUTH_CONFIRMATION_BUTTON_TEXT_COLOR = "authConfirmationButtonTextColor";
-  static final String AUTH_CANCELLATION_BACKGROUND_COLOR = "authCancellationBackgroundColor";
-  static final String AUTH_CANCELLATION_TITLE_COLOR = "authCancellationTitleColor";
-  static final String AUTH_CANCELLATION_MESSAGE_COLOR = "authCancellationMessageColor";
-  static final String AUTH_CANCELLATION_THUMB_COLOR = "authCancellationThumbColor";
-  static final String AUTH_CANCELLATION_APOSTROPHE_COLOR = "authCancellationApostropheColor";
-  static final String AUTH_CANCELLATION_BUTTON_BACKGROUND_COLOR = "authCancellationButtonBackgroundColor";
-  static final String AUTH_CANCELLATION_BUTTON_TEXT_COLOR = "authCancellationButtonTextColor";
-  static final String PIN_TITLE_TEXT_COLOR = "pinTitleTextColor";
-  static final String PIN_VALUE_TEXT_COLOR = "pinValueTextColor";
-  static final String PIN_NUMBER_BUTTON_TEXT_COLOR = "pinNumberButtonTextColor";
-  static final String PIN_NUMBER_BUTTON_BACKGROUND_COLOR = "pinNumberButtonBackgroundColor";
-  static final String PIN_REMOVE_BUTTON_TEXT_COLOR = "pinRemoveButtonTextColor";
-  static final String PIN_REMOVE_BUTTON_BACKGROUND_COLOR = "pinRemoveButtonBackgroundColor";
+  static const String ACTION_BAR_BACKGROUND_COLOR = "actionBarBackgroundColor";
+  static const String ACTION_BAR_TEXT_COLOR = "actionBarTextColor";
+  static const String BUTTON_TEXT_COLOR = "buttonTextColor";
+  static const String BUTTON_BACKGROUND_COLOR = "buttonBackgroundColor";
+  static const String SCREEN_BACKGROUND_COLOR = "screenBackgroundColor";
+  static const String NAME_TEXT_COLOR = "nameTextColor";
+  static const String TITLE_TEXT_COLOR = "titleTextColor";
+  static const String MESSAGE_TEXT_COLOR = "messageTextColor";
+  static const String ACTION_BAR_LOGO_PATH = "actionBarLogoPath";
+  static const String ACTION_BAR_TITLE = "actionBarTitle";
+  static const String INPUT_TEXT_COLOR = "inputTextColor";
+  static const String INPUT_SELECTION_COLOR = "inputSelectionColor";
+  static const String INPUT_ERROR_COLOR = "inputErrorColor";
+  static const String INPUT_DEFAULT_COLOR = "inputDefaultColor";
+  static const String QUESTION_MARK_COLOR = "questionMarkColor";
+  static const String TRANSACTION_TYPE_TEXT_COLOR = "transactionTypeTextColor";
+  static const String INFO_SECTION_TITLE_COLOR = "infoSectionTitleColor";
+  static const String INFO_SECTION_VALUE_COLOR = "infoSectionValueColor";
+  static const String FROM_TEXT_COLOR = "fromTextColor";
+  static const String AUTH_INFO_BACKGROUND_COLOR = "authInfoBackgroundColor";
+  static const String SHOW_DETAILS_TEXT_COLOR = "showDetailsTextColor";
+  static const String CONFIRM_BUTTON_BACKGROUND_COLOR = "confirmButtonBackgroundColor";
+  static const String CONFIRM_BUTTON_TEXT_COLOR = "confirmButtonTextColor";
+  static const String CANCEL_BUTTON_BACKGROUND_COLOR = "cancelButtonBackgroundColor";
+  static const String CANCEL_BUTTON_TEXT_COLOR = "cancelButtonTextColor";
+  static const String AUTH_CONFIRMATION_BACKGROUND_COLOR = "authConfirmationBackgroundColor";
+  static const String AUTH_CONFIRMATION_TITLE_COLOR = "authConfirmationTitleColor";
+  static const String AUTH_CONFIRMATION_MESSAGE_COLOR = "authConfirmationMessageColor";
+  static const String AUTH_CONFIRMATION_THUMB_COLOR = "authConfirmationThumbColor";
+  static const String AUTH_CONFIRMATION_APOSTROPHE_COLOR = "authConfirmationApostropheColor";
+  static const String AUTH_CONFIRMATION_BUTTON_BACKGROUND_COLOR = "authConfirmationButtonBackgroundColor";
+  static const String AUTH_CONFIRMATION_BUTTON_TEXT_COLOR = "authConfirmationButtonTextColor";
+  static const String AUTH_CANCELLATION_BACKGROUND_COLOR = "authCancellationBackgroundColor";
+  static const String AUTH_CANCELLATION_TITLE_COLOR = "authCancellationTitleColor";
+  static const String AUTH_CANCELLATION_MESSAGE_COLOR = "authCancellationMessageColor";
+  static const String AUTH_CANCELLATION_THUMB_COLOR = "authCancellationThumbColor";
+  static const String AUTH_CANCELLATION_APOSTROPHE_COLOR = "authCancellationApostropheColor";
+  static const String AUTH_CANCELLATION_BUTTON_BACKGROUND_COLOR = "authCancellationButtonBackgroundColor";
+  static const String AUTH_CANCELLATION_BUTTON_TEXT_COLOR = "authCancellationButtonTextColor";
+  static const String PIN_TITLE_TEXT_COLOR = "pinTitleTextColor";
+  static const String PIN_VALUE_TEXT_COLOR = "pinValueTextColor";
+  static const String PIN_NUMBER_BUTTON_TEXT_COLOR = "pinNumberButtonTextColor";
+  static const String PIN_NUMBER_BUTTON_BACKGROUND_COLOR = "pinNumberButtonBackgroundColor";
+  static const String PIN_REMOVE_BUTTON_TEXT_COLOR = "pinRemoveButtonTextColor";
+  static const String PIN_REMOVE_BUTTON_BACKGROUND_COLOR = "pinRemoveButtonBackgroundColor";
   
 
 }

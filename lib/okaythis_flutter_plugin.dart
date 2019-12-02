@@ -134,8 +134,6 @@ class PageTheme {
   static const String PIN_NUMBER_BUTTON_BACKGROUND_COLOR = "pinNumberButtonBackgroundColor";
   static const String PIN_REMOVE_BUTTON_TEXT_COLOR = "pinRemoveButtonTextColor";
   static const String PIN_REMOVE_BUTTON_BACKGROUND_COLOR = "pinRemoveButtonBackgroundColor";
-  
-
 }
 
 

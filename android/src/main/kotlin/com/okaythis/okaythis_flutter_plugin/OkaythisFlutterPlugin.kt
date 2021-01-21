@@ -13,6 +13,7 @@ import com.itransition.protectoria.psa_multitenant.restapi.GatewayRestServer
 import com.itransition.protectoria.psa_multitenant.state.ApplicationState
 import com.okaythis.okaythis_flutter_plugin.logger.OkaySdkExceptionLogger
 import com.okaythis.okaythis_flutter_plugin.storage.SpaStorageImp
+import com.okaythis.okaythis_flutter_plugin.resourceprovider.DefaultResourceProvider
 import com.protectoria.psa.PsaManager
 import com.protectoria.psa.api.PsaConstants
 import com.protectoria.psa.api.converters.PsaIntentUtils
@@ -27,7 +28,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.common.PluginRegistry
-
+import java.util.*
 
 
 class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : MethodCallHandler, PluginRegistry.ActivityResultListener {
@@ -35,7 +36,7 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
     private val spaStorage = SpaStorageImp(context)
 
     private fun initPsa(pssEndpoint: String): String {
-        val psaManager = PsaManager.init(this.context, OkaySdkExceptionLogger())
+        val psaManager = PsaManager.init(this.context, OkaySdkExceptionLogger(),  DefaultResourceProvider(context))
         psaManager.setPssAddress(pssEndpoint)
         GatewayRestServer.init(PsaGsonFactory().create(), "$pssEndpoint/gateway/")
         return "PSS endpoint set successfully"
@@ -55,7 +56,7 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
     }
 
     private fun requestRequiredPermissions(): Array<String> {
-        return  PsaManager.getRequiredPermissions()
+        return PsaManager.getRequiredPermissions()
     }
 
     private fun unLinkTenant(tenantId: Int, spaStorage: SpaStorage, unlinkingScenarioListener: UnlinkingScenarioListener) {
@@ -66,8 +67,8 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-            "getPlatformVersion" -> {
-                result.success("Android ${android.os.Build.VERSION.RELEASE}")
+            "isEnrolled" -> {
+                result.success(PsaManager.getInstance().isEnrolled);
             }
             "initPsa" -> {
                 val pssEndpoint = call.arguments
@@ -78,7 +79,7 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
 
             "unLinkTenant" -> {
                 val tenantId: Int? = call.argument("tenantId")
-                val unlinkingScenarioListener: UnlinkingScenarioListener = object: UnlinkingScenarioListener {
+                val unlinkingScenarioListener: UnlinkingScenarioListener = object : UnlinkingScenarioListener {
                     override fun onUnlinkingFailed(p0: ApplicationState) {
                         // Notify user linking failed
                         channel.invokeMethod("onUnLinkingHandler", false)
@@ -96,9 +97,9 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
             }
             "linkTenant" -> {
                 val linkingCode: String? = call.argument("linkingCode")
-                val linkingScenarioListener: LinkingScenarioListener? = object: LinkingScenarioListener {
+                val linkingScenarioListener: LinkingScenarioListener? = object : LinkingScenarioListener {
                     override fun onLinkingFailed(p0: ApplicationState?) {
-                      // Notify user linking failed
+                        // Notify user linking failed
                         channel.invokeMethod("onLinkingHandler", false)
                         result.success(false)
                     }
@@ -120,7 +121,7 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
                 spaStorage.putAppPNS(appPns!!)
                 spaStorage.putPubPssBase64(pubPss!!)
                 spaStorage.putInstallationId(installationId!!)
-                startEnrollmentActivity(SpaEnrollData(appPns,pubPss, installationId, null, PsaType.OKAY))
+                startEnrollmentActivity(SpaEnrollData(appPns, pubPss, installationId, null, PsaType.OKAY))
                 result.success(null)
             }
             "startAuthorization" -> {
@@ -171,7 +172,7 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
         return false
     }
 
-    private fun mapTheme(map: Map<*,*>): PageTheme {
+    private fun mapTheme(map: Map<*, *>): PageTheme {
         val mapper = ObjectMapper()
         return mapper.convertValue(parseThemeValues(map), PageTheme::class.java)
     }

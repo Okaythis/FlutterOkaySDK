@@ -1,27 +1,23 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
 
 typedef Future<dynamic> MessageHandler(bool status);
 
 class OkaythisFlutterPlugin {
-  static const MethodChannel _channel = const MethodChannel('okaythis_flutter_plugin');
+  static const MethodChannel _channel =
+      const MethodChannel('okaythis_flutter_plugin');
   static MessageHandler _onEnrollmentHandler;
   static MessageHandler _onLinkingHandler;
   static MessageHandler _onUnLinkingHandler;
   static MessageHandler _onAuthorizationHandler;
   static String _host;
 
-
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-
   static Future<String> initPsa() async {
     final String msg = await _channel.invokeMethod("initPsa", _host);
     return msg;
   }
-  
+
   static Future<void> config({
     String host,
     MessageHandler onEnrollmentHandler,
@@ -37,39 +33,47 @@ class OkaythisFlutterPlugin {
     _channel.setMethodCallHandler(_methodCallHandler);
   }
 
-  static Future<void> startEnrollment(String appPns, String pubPss, String installationId) async {
-      await _channel.invokeMethod("startEnrollment", <String, dynamic>{
-        "appPns": appPns,
-        "pubPss": pubPss,
-        "installationId": installationId,
-        "host": _host
-      });
+  static Future<void> startEnrollment(
+    String appPns,
+    String pubPss,
+    String installationId,
+    bool backgroundEnroll,
+  ) async {
+    await _channel.invokeMethod("startEnrollment", <String, dynamic>{
+      "appPns": appPns,
+      "pubPss": pubPss,
+      "backgroundEnroll": backgroundEnroll,
+      "installationId": installationId,
+      "host": _host
+    });
   }
 
-  static Future<void> startAuthorization(int sessionId, String appPns,  Map<String, dynamic> pageTheme) async {
-      await _channel.invokeMethod("startAuthorization", <String, dynamic>{
-        "sessionId": sessionId,
-        "appPns": appPns,
-        "pageTheme": pageTheme
-      });
+  static Future<void> startAuthorization(
+      int sessionId, String appPns, Map<String, dynamic> theme) async {
+    await _channel.invokeMethod("startAuthorization", <String, dynamic>{
+      "sessionId": sessionId,
+      "appPns": appPns,
+      "pageTheme": theme
+    });
   }
 
   static Future<void> linkTenant(String linkingCode) async {
-      await _channel.invokeMethod("linkTenant", <String, dynamic>{
-        "linkingCode": linkingCode
-      });
+    await _channel.invokeMethod(
+        "linkTenant", <String, dynamic>{"linkingCode": linkingCode});
   }
 
   static Future<void> unlinkTenant(int tenantId) async {
-      await _channel.invokeMethod("unlinkTenant", <String, dynamic>{
-        "tenantId": tenantId
-      });
+    await _channel
+        .invokeMethod("unlinkTenant", <String, dynamic>{"tenantId": tenantId});
   }
-
 
   static Future<List<dynamic>> requestRequiredPermissions() async {
     var permissions = await _channel.invokeMethod("requestRequiredPermissions");
     return permissions;
+  }
+
+  static Future<bool> isEnrolled() async {
+    return await _channel.invokeMethod("isEnrolled");
   }
 
   static Future<void> _methodCallHandler(MethodCall call) async {
@@ -82,13 +86,13 @@ class OkaythisFlutterPlugin {
         return _onUnLinkingHandler(call.arguments);
       case "onAuthorizationHandler":
         return _onAuthorizationHandler(call.arguments);
-      default: throw UnsupportedError("Callback not supported");
+      default:
+        throw UnsupportedError("Callback not supported");
     }
   }
 }
 
-class PageTheme {
-
+class OkayAndroidTheme {
   static const String ACTION_BAR_BACKGROUND_COLOR = "actionBarBackgroundColor";
   static const String ACTION_BAR_TEXT_COLOR = "actionBarTextColor";
   static const String BUTTON_TEXT_COLOR = "buttonTextColor";
@@ -110,33 +114,118 @@ class PageTheme {
   static const String FROM_TEXT_COLOR = "fromTextColor";
   static const String AUTH_INFO_BACKGROUND_COLOR = "authInfoBackgroundColor";
   static const String SHOW_DETAILS_TEXT_COLOR = "showDetailsTextColor";
-  static const String CONFIRM_BUTTON_BACKGROUND_COLOR = "confirmButtonBackgroundColor";
+  static const String CONFIRM_BUTTON_BACKGROUND_COLOR =
+      "confirmButtonBackgroundColor";
   static const String CONFIRM_BUTTON_TEXT_COLOR = "confirmButtonTextColor";
-  static const String CANCEL_BUTTON_BACKGROUND_COLOR = "cancelButtonBackgroundColor";
+  static const String CANCEL_BUTTON_BACKGROUND_COLOR =
+      "cancelButtonBackgroundColor";
   static const String CANCEL_BUTTON_TEXT_COLOR = "cancelButtonTextColor";
-  static const String AUTH_CONFIRMATION_BACKGROUND_COLOR = "authConfirmationBackgroundColor";
-  static const String AUTH_CONFIRMATION_TITLE_COLOR = "authConfirmationTitleColor";
-  static const String AUTH_CONFIRMATION_MESSAGE_COLOR = "authConfirmationMessageColor";
-  static const String AUTH_CONFIRMATION_THUMB_COLOR = "authConfirmationThumbColor";
-  static const String AUTH_CONFIRMATION_APOSTROPHE_COLOR = "authConfirmationApostropheColor";
-  static const String AUTH_CONFIRMATION_BUTTON_BACKGROUND_COLOR = "authConfirmationButtonBackgroundColor";
-  static const String AUTH_CONFIRMATION_BUTTON_TEXT_COLOR = "authConfirmationButtonTextColor";
-  static const String AUTH_CANCELLATION_BACKGROUND_COLOR = "authCancellationBackgroundColor";
-  static const String AUTH_CANCELLATION_TITLE_COLOR = "authCancellationTitleColor";
-  static const String AUTH_CANCELLATION_MESSAGE_COLOR = "authCancellationMessageColor";
-  static const String AUTH_CANCELLATION_THUMB_COLOR = "authCancellationThumbColor";
-  static const String AUTH_CANCELLATION_APOSTROPHE_COLOR = "authCancellationApostropheColor";
-  static const String AUTH_CANCELLATION_BUTTON_BACKGROUND_COLOR = "authCancellationButtonBackgroundColor";
-  static const String AUTH_CANCELLATION_BUTTON_TEXT_COLOR = "authCancellationButtonTextColor";
+  static const String AUTH_CONFIRMATION_BACKGROUND_COLOR =
+      "authConfirmationBackgroundColor";
+  static const String AUTH_CONFIRMATION_TITLE_COLOR =
+      "authConfirmationTitleColor";
+  static const String AUTH_CONFIRMATION_MESSAGE_COLOR =
+      "authConfirmationMessageColor";
+  static const String AUTH_CONFIRMATION_THUMB_COLOR =
+      "authConfirmationThumbColor";
+  static const String AUTH_CONFIRMATION_APOSTROPHE_COLOR =
+      "authConfirmationApostropheColor";
+  static const String AUTH_CONFIRMATION_BUTTON_BACKGROUND_COLOR =
+      "authConfirmationButtonBackgroundColor";
+  static const String AUTH_CONFIRMATION_BUTTON_TEXT_COLOR =
+      "authConfirmationButtonTextColor";
+  static const String AUTH_CANCELLATION_BACKGROUND_COLOR =
+      "authCancellationBackgroundColor";
+  static const String AUTH_CANCELLATION_TITLE_COLOR =
+      "authCancellationTitleColor";
+  static const String AUTH_CANCELLATION_MESSAGE_COLOR =
+      "authCancellationMessageColor";
+  static const String AUTH_CANCELLATION_THUMB_COLOR =
+      "authCancellationThumbColor";
+  static const String AUTH_CANCELLATION_APOSTROPHE_COLOR =
+      "authCancellationApostropheColor";
+  static const String AUTH_CANCELLATION_BUTTON_BACKGROUND_COLOR =
+      "authCancellationButtonBackgroundColor";
+  static const String AUTH_CANCELLATION_BUTTON_TEXT_COLOR =
+      "authCancellationButtonTextColor";
   static const String PIN_TITLE_TEXT_COLOR = "pinTitleTextColor";
   static const String PIN_VALUE_TEXT_COLOR = "pinValueTextColor";
   static const String PIN_NUMBER_BUTTON_TEXT_COLOR = "pinNumberButtonTextColor";
-  static const String PIN_NUMBER_BUTTON_BACKGROUND_COLOR = "pinNumberButtonBackgroundColor";
+  static const String PIN_NUMBER_BUTTON_BACKGROUND_COLOR =
+      "pinNumberButtonBackgroundColor";
   static const String PIN_REMOVE_BUTTON_TEXT_COLOR = "pinRemoveButtonTextColor";
-  static const String PIN_REMOVE_BUTTON_BACKGROUND_COLOR = "pinRemoveButtonBackgroundColor";
+  static const String PIN_REMOVE_BUTTON_BACKGROUND_COLOR =
+      "pinRemoveButtonBackgroundColor";
 }
 
+class OkayiOSTheme {
+  static const String LOGO = "PSAThemeLogoKey";
+  static const String TITLE = "PSAThemeTitleKey";
+  static const String LOGO_Data = "PSAThemeLogoDataKey";
+  static const String SCREEN_BACKGROUND_COLOR =
+      "PSAThemeScreenBackgroundColorKey";
+  static const String ACTIVITY_INDICATOR_COLOR =
+      "PSAThemeActivityIndicatorColor";
+  static const String TITLE_TEXT_COLOR = "PSAThemeTitleTextColorKey";
+  static const String QUESTION_MARK_COLOR = "PSAThemeQuestionMarkColorKey";
+  static const String TRANSACTION_TYPE_TEXT_COLOR =
+      "PSAThemeTransactionTypeTextColorKey";
+  static const String INFO_SECTION_TITLE_COLOR =
+      "PSAThemeInfoSectionTitleColorKey";
+  static const String INFO_SECTION_VALUE_COLOR =
+      "PSAThemeInfoSectionValueColorKey";
+  static const String FROM_TEXT_COLOR = "PSAThemeFromTextColorKey";
+  static const String MESSAGE_TEXT_COLOR = "PSAThemeMessageTextColorKey";
+  static const String AUTH_INFO_BACKGROUND_COLOR =
+      "PSAThemeAuthInfoBackgroundColorKey";
+  static const String SHOW_DETAILS_TEXT_COLOR =
+      "PSAThemeShowDetailsTextColorKey";
+  static const String CONFIRM_BUTTON_BACKGROUND_COLOR =
+      "PSAThemeConfirmButtonBackgroundColorKey";
+  static const String CONFIRM_BUTTON_TEXT_COLOR =
+      "PSAThemeConfirmButtonTextColorKey";
+  static const String CANCEL_BUTTON_BACKGROUND_COLOR =
+      "PSAThemeCancelButtonBackgroundColorKey";
+  static const String CANCEL_BUTTON_TEXT_COLOR =
+      "PSAThemeCancelButtonTextColorKey";
+  static const String AUTH_CONFIRMATION_BACKGROUND_COLOR =
+      "PSAThemeAuthConfirmationBackgroundColorKey";
+  static const String AUTH_CONFIRMATION_TITLE_COLOR =
+      "PSAThemeAuthConfirmationTitleColorKey";
+  static const String AUTH_CONFIRMATION_MESSAGE_COLOR =
+      "PSAThemeAuthConfirmationMessageColorKey";
+  static const String AUTH_CONFIRMATION_THUMB_COLOR =
+      "PSAThemeAuthConfirmationThumbColorKey";
+  static const String AUTH_CONFIRMATION_APOSTROPHE_COLOR =
+      "PSAThemeAuthConfirmationApostropheColorKey";
+  static const String AUTH_CONFIRMATION_BUTTON_BACKGROUND_COLOR =
+      "PSAThemeAuthConfirmationButtonBackgroundColorKey";
+  static const String AUTH_CONFIRMATION_BUTTON_TEXT_COLOR =
+      "PSAThemeAuthConfirmationButtonTextColorKey";
+  static const String AUTH_CANCELLATION_BACKGROUND_COLOR =
+      "PSAThemeAuthCancellationBackgroundColorKey";
+  static const String AUTH_CANCELLATION_TITLE_COLOR =
+      "PSAThemeAuthCancellationTitleColorKey";
+  static const String AUTH_CANCELLATION_MESSAGE_COLOR =
+      "PSAThemeAuthCancellationMessageColorKey";
+  static const String AUTH_CANCELLATION_THUMB_COLOR =
+      "PSAThemeAuthCancellationThumbColorKey";
+  static const String AUTH_CANCELLATION_APOSTROPHE_COLOR =
+      "PSAThemeAuthCancellationApostropheColorKey";
+  static const String AUTH_CANCELLATION_BUTTON_BACKGROUND_COLOR =
+      "PSAThemeAuthCancellationButtonBackgroundColorKey";
+  static const String AUTH_CANCELLATION_BUTTON_TEXT_COLOR =
+      "PSAThemeAuthCancellationButtonTextColorKey";
+  static const String PIN_TITLE_TEXT_COLOR = "PSAThemePinTitleTextColorKey";
+  static const String PIN_VALUE_TEXT_COLOR = "PSAThemePinValueTextColorKey";
+  static const String PIN_NUMBER_BUTTON_TEXT_COLOR =
+      "PSAThemePinNumberButtonTextColorKey";
+  static const String PIN_NUMBER_BUTTON_BACKGROUND_COLOR =
+      "PSAThemePinNumberButtonBackgroundColorKey";
+  static const String PIN_REMOVE_BUTTON_TEXT_COLOR =
+      "PSAThemePinRemoveButtonTextColorKey";
+  static const String PIN_REMOVE_BUTTON_BACKGROUND_COLOR =
+      "PSAThemePinRemoveButtonBackgroundColorKey";
+}
 
-
-
-
+class ResourceProvider {}

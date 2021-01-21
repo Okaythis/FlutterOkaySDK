@@ -6,11 +6,11 @@ Pod::Spec.new do |s|
   s.version          = '0.0.1'
   s.summary          = 'A Flutter plugin for Okaythis.'
   s.description      = <<-DESC
-A Flutter plugin for Okaythis.
+A Flutter plugin for Okaythis SDK.
                        DESC
   s.homepage         = 'http://okaythis.com'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Okaythis' => 'email@example.com' }
+  s.author           = { 'Okaythis' => 'hello@okaythis.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
@@ -24,7 +24,7 @@ A Flutter plugin for Okaythis.
 #  s.xcconfig = { 'OTHER_LDFLAGS' => '-framework PSACommon' }
 #  s.vendored_frameworks = 'PSACommon.framework'
 
-  s.dependency 'PSASDK', '~> 1.0.6'
+  s.dependency 'PSASDK', '~> 1.0.7'
   s.ios.deployment_target = '10.0'
   
 end

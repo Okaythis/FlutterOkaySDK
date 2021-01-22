@@ -125,7 +125,7 @@ class OkaythisFlutterPlugin(val activity: Activity, val context: Context) : Meth
                 result.success(null)
             }
             "startAuthorization" -> {
-                val sessionId: Integer? = call.argument("sessionId")
+                val sessionId: Int? = call.argument("sessionId")
                 val appPns: String? = call.argument("appPns")
                 val pageTheme: Map<String, Any>? = call.argument("pageTheme")
                 var baseTheme = mapTheme(pageTheme!!)
